@@ -216,16 +216,37 @@ button.disabled:hover {
 <ul id="evaluating" class="item-list">
 </ul>
 
-<p id="buttons"><button id="pick">Pick</button> <button id="pass">Pass</button> <button id="undo">Undo</button> <button id="redo">Redo</button></p>
+<p id="buttons"><button id="pick">Pick</button> <button id="pass">Pass</button> <button id="undo">Undo</button> <button id="redo">Redo</button> <button id="reset">Reset</button></p>
 </div>
 
 <div id="secondary">
-<h2>Found favorites</h2>
+<h2>Found favourites</h2>
 
 <ol id="favorites" class="item-list">
 </ol>
 </div>
 </div>
+<p>
+ <label for="batch-size">Batch size:</label><br>
+ <input type="number" id="batch-size" name="batch-size" min="2" max="20">
+</p>
+<p><b>Include which games?</b>
+<label><input type="checkbox" name="roles" class="roles" value="xenoblade1" checked> Xenoblade Chronicles</label>
+<label><input type="checkbox" name="roles" class="roles" value="xenobladex" checked> Xenoblade Chronicles X</label>
+<label><input type="checkbox" name="roles" class="roles" value="xenoblade2" checked> Xenoblade Chronicles 2</label>
+<label><input type="checkbox" name="roles" class="roles" value="xenoblade3" checked> Xenoblade Chronicles 3</label>
+<label><input type="checkbox" name="roles" class="roles" value="connected" checked> Future Connected</label>
+<label><input type="checkbox" name="roles" class="roles" value="torna" checked> Torna: The Golden Country</label>
+<label><input type="checkbox" name="roles" class="roles" value="redeemed" checked> Future Redeemed</label>
+</p>
+<p><label><b>Exclude optional party members?</b> <input type="checkbox" id="exclude-optional"></label></p>
+<p><label><b>Exclude temporary party members?</b> <input type="checkbox" id="exclude-temporary"></label></p>
+<p><label><b>Exclude DLC party members?</b> <input type="checkbox" id="exclude-dlc"></label></p>
+<p><label><b>Exclude gacha Blades (Xenoblade 2)?</b> <input type="checkbox" id="exclude-gacha"></label></p>
+<p><label><b>Exclude New Game+ Blades (Xenoblade 2)?</b> <input type="checkbox" id="exclude-ngplus"></label></p>
+<p><label><b>Exclude repeat characters?</b> <input type="checkbox" id="exclude-repeats"></label></p>
+<p><label>Note that DLC and gacha characters will appear in the picker if they are not excluded, even if other optional characters are excluded.</label></p>
+<br>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="picker.js"></script>
 <script src="picker-ui.js"></script>
@@ -234,11 +255,178 @@ button.disabled:hover {
 'use strict';
 
 var items = [
-    // Define your items here
+    {id: "shulkxc1", name: "Shulk (XC)", role: "xenoblade1", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/shulkxc1.png"},
+    {id: "reyn", name: "Reyn", role: "xenoblade1", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/reyn.png"},
+    {id: "sharla", name: "Sharla", role: "xenoblade1", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/sharla.png"},
+    {id: "dunban", name: "Dunban", role: "xenoblade1", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/dunban.png"},
+    {id: "meliaxc1", name: "Melia (XC)", role: "xenoblade1", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/meliaxc1.png"},
+    {id: "riki", name: "Riki", role: "xenoblade1", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/riki.png"},
+    {id: "mechafiora", name: "Mecha-Fiora", role: "xenoblade1", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/mechafiora.png"},
+    {id: "fioraxc1", name: "Fiora (XC)", role: "xenoblade1", optional: false, temporary: true, dlc: false, gacha: false, ngplus: false, base: "mechafiora", image: "picker-images/fioraxc1.png"},
+    {id: "dickson", name: "Dickson", role: "xenoblade1", optional: false, temporary: true, dlc: false, gacha: false, ngplus: false, image: "picker-images/dickson.png"},
+    {id: "mumkhar", name: "Mumkhar", role: "xenoblade1", optional: false, temporary: true, dlc: false, gacha: false, ngplus: false, image: "picker-images/mumkhar.png"},
+    {id: "alvis", name: "Alvis", role: "xenoblade1", optional: false, temporary: true, dlc: false, gacha: false, ngplus: false, image: "picker-images/alvis.png"},
+    {id: "cross", name: "Cross", role: "xenobladex", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/cross.png"},
+    {id: "elmaxcx", name: "Elma (XCX)", role: "xenobladex", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/elmaxcx.png"},
+    {id: "lin", name: "Lin", role: "xenobladex", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/lin.png"},
+    {id: "doug", name: "Doug", role: "xenobladex", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/doug.png"},
+    {id: "gwin", name: "Gwin", role: "xenobladex", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/gwin.png"},
+    {id: "irina", name: "Irina", role: "xenobladex", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/irina.png"},
+    {id: "lao", name: "Lao", role: "xenobladex", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/lao.png"},
+    {id: "lcirufe", name: "L'cirufe", role: "xenobladex", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/lcirufe.png"},
+    {id: "nagi", name: "Nagi", role: "xenobladex", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/nagi.png"},
+    {id: "celica", name: "Celica", role: "xenobladex", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/celica.png"},
+    {id: "phog", name: "Phog", role: "xenobladex", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/phog.png"},
+    {id: "frye", name: "Frye", role: "xenobladex", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/frye.png"},
+    {id: "hope", name: "Hope", role: "xenobladex", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/hope.png"},
+    {id: "mia", name: "Mia", role: "xenobladex", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/mia.png"},
+    {id: "murderess", name: "Murderess", role: "xenobladex", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/murderess.png"},
+    {id: "hb", name: "H.B.", role: "xenobladex", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/hb.png"},
+    {id: "boze", name: "Bozé", role: "xenobladex", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/boze.png"},
+    {id: "yelv", name: "Yelv", role: "xenobladex", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/yelv.png"},
+    {id: "alexa", name: "Alexa", role: "xenobladex", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/alexa.png"},
+    {id: "rexxc2", name: "Rex (XC2)", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/rexxc2.png"},
+    {id: "pyra", name: "Pyra", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/pyra.png"},
+    {id: "mythraxc2", name: "Mythra (XC2)", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/mythraxc2.png"},
+    {id: "pneuma", name: "Pneuma", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/pneuma.png"},
+    {id: "niadriver", name: "Nia (Driver)", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/niadriver.png"},
+    {id: "niablade", name: "Nia (Blade)", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, base: "niadriver", image: "picker-images/niablade.png"},
+    {id: "dromarch", name: "Dromarch", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/dromarch.png"},
+    {id: "tora", name: "Tora", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/tora.png"},
+    {id: "poppia", name: "Poppi α", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/poppia.png"},
+    {id: "poppiqt", name: "Poppi QT", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, base: "poppia", image: "picker-images/poppiqt.png"},
+    {id: "vandham", name: "Vandham", role: "xenoblade2", optional: false, temporary: true, dlc: false, gacha: false, ngplus: false, image: "picker-images/vandham.png"},
+    {id: "roc", name: "Roc", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/roc.png"},
+    {id: "morag", name: "Mòrag", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/morag.png"},
+    {id: "brighidxc2", name: "Brighid (XC2)", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/brighidxc2.png"},
+    {id: "zeke", name: "Zeke", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/zeke.png"},
+    {id: "pandoria", name: "Pandoria", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/pandoria.png"},
+    {id: "jinxc2", name: "Jin (XC2)", role: "xenoblade2", optional: false, temporary: true, dlc: false, gacha: false, ngplus: false, image: "picker-images/jinxc2.png"},
+    {id: "malos", name: "Malos", role: "xenoblade2", optional: false, temporary: true, dlc: false, gacha: false, ngplus: false, image: "picker-images/malos.png"},
+    {id: "wulfric", name: "Wulfric", role: "xenoblade2", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/wulfric.png"},
+    {id: "aegaeonxc2", name: "Aegaeon (XC2)", role: "xenoblade2", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/aegaeonxc2.png"},
+    {id: "poppiqtpi", name: "Poppi QTπ", role: "xenoblade2", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, base: "poppia", image: "picker-images/poppiqtpi.png"},
+    {id: "sheba", name: "Sheba", role: "xenoblade2", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/sheba.png"},
+    {id: "kasandra", name: "Kasandra", role: "xenoblade2", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/kasandra.png"},
+    {id: "vess", name: "Vess", role: "xenoblade2", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/vess.png"},
+    {id: "theory", name: "Theory", role: "xenoblade2", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/theory.png"},
+    {id: "praxis", name: "Praxis", role: "xenoblade2", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/praxis.png"},
+    {id: "herald", name: "Herald", role: "xenoblade2", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/herald.png"},
+    {id: "adenine", name: "Adenine", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/adenine.png"},
+    {id: "agate", name: "Agate", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/agate.png"},
+    {id: "azami", name: "Azami", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/azami.png"},
+    {id: "boreas", name: "Boreas", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/boreas.png"},
+    {id: "dagas", name: "Dagas", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/dagas.png"},
+    {id: "dahlia", name: "Dahlia", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/dahlia.png"},
+    {id: "electra", name: "Electra", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/electra.png"},
+    {id: "finch", name: "Finch", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/finch.png"},
+    {id: "floren", name: "Floren", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/floren.png"},
+    {id: "godfrey", name: "Godfrey", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/godfrey.png"},
+    {id: "gorg", name: "Gorg", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/gorg.png"},
+    {id: "kosmos", name: "KOS-MOS", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/kosmos.png"},
+    {id: "kora", name: "Kora", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/kora.png"},
+    {id: "newt", name: "Newt", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/newt.png"},
+    {id: "nim", name: "Nim", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/nim.png"},
+    {id: "perceval", name: "Perceval", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/perceval.png"},
+    {id: "perun", name: "Perun", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/perun.png"},
+    {id: "telos", name: "T-elos", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/telos.png"},
+    {id: "ursula", name: "Ursula", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/ursula.png"},
+    {id: "vale", name: "Vale", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/vale.png"},
+    {id: "zenobia", name: "Zenobia", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: false, image: "picker-images/zenobia.png"},
+    {id: "mikhail", name: "Mikhail", role: "xenoblade2", optional: true, temporary: false, dlc: false, gacha: false, ngplus: true, image: "picker-images/mikhail.png"},
+    {id: "akhos", name: "Akhos", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: true, image: "picker-images/akhos.png"},
+    {id: "cressidus", name: "Cressidus", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: true, image: "picker-images/cressidus.png"},
+    {id: "obrona", name: "Obrona", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: true, image: "picker-images/obrona.png"},
+    {id: "patroka", name: "Patroka", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: true, image: "picker-images/patroka.png"},
+    {id: "perdido", name: "Perdido", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: true, image: "picker-images/perdido.png"},
+    {id: "sever", name: "Sever", role: "xenoblade2", optional: false, temporary: false, dlc: false, gacha: true, ngplus: true, image: "picker-images/sever.png"},
+    {id: "poppibuster", name: "Poppibuster", role: "xenoblade2", optional: false, temporary: false, dlc: true, gacha: false, ngplus: false, image: "picker-images/poppibuster.png"},
+    {id: "shulkxc2", name: "Shulk (XC2)", role: "xenoblade2", optional: false, temporary: false, dlc: true, gacha: false, ngplus: false, base: "shulkxc1", image: "picker-images/shulkxc2.png"},
+    {id: "fioraxc2", name: "Fiora (XC2)", role: "xenoblade2", optional: false, temporary: false, dlc: true, gacha: false, ngplus: false, base: "mechafiora", image: "picker-images/fioraxc2.png"},
+    {id: "crossette", name: "Crossette", role: "xenoblade2", optional: false, temporary: false, dlc: true, gacha: false, ngplus: false, image: "picker-images/crossette.png"},
+    {id: "elmaxc2", name: "Elma (XC2)", role: "xenoblade2", optional: false, temporary: false, dlc: true, gacha: false, ngplus: false, base: "elmaxcx", image: "picker-images/elmaxc2.png"},
+    {id: "corvin", name: "Corvin", role: "xenoblade2", optional: false, temporary: false, dlc: true, gacha: false, ngplus: false, image: "picker-images/corvin.png"},
+    {id: "noah", name: "Noah", role: "xenoblade3", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/noah.png"},
+    {id: "mio", name: "Mio", role: "xenoblade3", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/mio.png"},
+    {id: "eunie", name: "Eunie", role: "xenoblade3", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/eunie.png"},
+    {id: "taion", name: "Taion", role: "xenoblade3", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/taion.png"},
+    {id: "lanz", name: "Lanz", role: "xenoblade3", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/lanz.png"},
+    {id: "sena", name: "Sena", role: "xenoblade3", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/sena.png"},
+    {id: "valdi", name: "Valdi", role: "xenoblade3", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/valdi.png"},
+    {id: "riku", name: "Riku", role: "xenoblade3", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/riku.png"},
+    {id: "manana", name: "Manana", role: "xenoblade3", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/manana.png"},
+    {id: "juniper", name: "Juniper", role: "xenoblade3", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/juniper.png"},
+    {id: "ghondor", name: "Ghondor", role: "xenoblade3", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/ghondor.png"},
+    {id: "miyabi", name: "Miyabi", role: "xenoblade3", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/miyabi.png"},
+    {id: "ethel", name: "Ethel", role: "xenoblade3", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/ethel.png"},
+    {id: "zeon", name: "Zeon", role: "xenoblade3", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/zeon.png"},
+    {id: "teach", name: "Teach", role: "xenoblade3", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/teach.png"},
+    {id: "gray", name: "Gray", role: "xenoblade3", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/gray.png"},
+    {id: "isurd", name: "Isurd", role: "xenoblade3", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/isurd.png"},
+    {id: "ashera", name: "Ashera", role: "xenoblade3", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/ashera.png"},
+    {id: "alexandria", name: "Alexandria", role: "xenoblade3", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/alexandria.png"},
+    {id: "monica", name: "Monica", role: "xenoblade3", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/monica.png"},
+    {id: "fiona", name: "Fiona", role: "xenoblade3", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/fiona.png"},
+    {id: "triton", name: "Triton", role: "xenoblade3", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/triton.png"},
+    {id: "cammuravi", name: "Cammuravi", role: "xenoblade3", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/cammuravi.png"},
+    {id: "segiri", name: "Segiri", role: "xenoblade3", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/segiri.png"},
+    {id: "niaxc3", name: "Nia (XC3)", role: "xenoblade3", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, base: "niadriver", image: "picker-images/niaxc3.png"},
+    {id: "meliaxc3", name: "Melia (XC3)", role: "xenoblade3", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, base: "meliaxc1", image: "picker-images/meliaxc3.png"},
+    {id: "mwamba", name: "Mwamba", role: "xenoblade3", optional: false, temporary: true, dlc: false, gacha: false, ngplus: false, image: "picker-images/mwamba.png"},
+    {id: "ino", name: "Ino", role: "xenoblade3", optional: false, temporary: false, dlc: true, gacha: false, ngplus: false, image: "picker-images/ino.png"},
+    {id: "masha", name: "Masha", role: "xenoblade3", optional: false, temporary: false, dlc: true, gacha: false, ngplus: false, image: "picker-images/masha.png"},
+    {id: "meliafc", name: "Melia (FC)", role: "connected", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, base: "meliaxc1", image: "picker-images/meliafc.png"},
+    {id: "shulkfc", name: "Shulk (FC)", role: "connected", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, base: "shulkxc1", image: "picker-images/shulkfc.png"},
+    {id: "kino", name: "Kino", role: "connected", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/kino.png"},
+    {id: "nene", name: "Nene", role: "connected", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/nene.png"},
+    {id: "lora", name: "Lora", role: "torna", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/lora.png"},
+    {id: "jintorna", name: "Jin (Torna)", role: "torna", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, base: "jinxc2", image: "picker-images/jintorna.png"},
+    {id: "haze", name: "Haze", role: "torna", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/haze.png"},
+    {id: "addam", name: "Addam", role: "torna", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/addam.png"},
+    {id: "mythratorna", name: "Mythra (Torna)", role: "torna", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, base: "mythraxc2", image: "picker-images/mythratorna.png"},
+    {id: "minoth", name: "Minoth", role: "torna", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/minoth.png"},
+    {id: "hugo", name: "Hugo", role: "torna", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/hugo.png"},
+    {id: "brighidtorna", name: "Brighid (Torna)", role: "torna", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, base: "brighidxc2", image: "picker-images/brighidtorna.png"},
+    {id: "aegaeontorna", name: "Aegaeon (Torna)", role: "torna", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, base: "aegaeonxc2", image: "picker-images/aegaeontorna.png"},
+    {id: "matthew", name: "Matthew", role: "redeemed", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/matthew.png"},
+    {id: "a", name: "A", role: "redeemed", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/a.png"},
+    {id: "nikol", name: "Nikol", role: "redeemed", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/nikol.png"},
+    {id: "glimmer", name: "Glimmer", role: "redeemed", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/glimmer.png"},
+    {id: "shulkfr", name: "Shulk (FR)", role: "redeemed", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, base: "shulkxc1", image: "picker-images/shulkfr.png"},
+    {id: "rexfr", name: "Rex (FR)", role: "redeemed", optional: false, temporary: false, dlc: false, gacha: false, ngplus: false, base: "rexxc2", image: "picker-images/rexfr.png"},
+    {id: "nael", name: "Na'el", role: "redeemed", optional: true, temporary: false, dlc: false, gacha: false, ngplus: false, image: "picker-images/nael.png"}
 ];
 
 var myPicker = new picker.Picker({
-    items: items
+    items: items,
+    localStorageKey: 'picker-state',
+    defaultSettings: {
+        maxBatchSize: 2,
+        roles: ['xenoblade1', 'xenobladex', 'xenoblade2', 'xenoblade3', 'connected', 'torna', 'redeemed'],
+        excludeOptional: false,
+        excludeTemporary: false,
+        excludeDLC: false,
+        excludeGacha: false,
+        excludeNGPlus: false,
+        excludeRepeats: false
+    },
+    getFilteredItems: function(settings) {
+        var used = {};
+        var filteredList = [];
+        for (var i = 0; i < items.length; i++) {
+            if (settings.roles.indexOf(items[i].role) === -1 || settings.excludeOptional && items[i].optional) continue;
+            if (settings.roles.indexOf(items[i].role) === -1 || settings.excludeTemporary && items[i].temporary) continue;
+            if (settings.roles.indexOf(items[i].role) === -1 || settings.excludeDLC && items[i].dlc) continue;
+            if (settings.roles.indexOf(items[i].role) === -1 || settings.excludeGacha && items[i].gacha) continue;
+            if (settings.roles.indexOf(items[i].role) === -1 || settings.excludeNGPlus && items[i].ngplus) continue;
+            if (settings.excludeRepeats) {
+                if (items[i].base && used[items[i].base]) continue;
+                used[items[i].base || items[i].id] = true;
+            }
+            filteredList.push(items[i].id);
+        }
+        return filteredList;
+    }
 });
 
 var pickerUI = new PickerUI(myPicker, {
@@ -247,8 +435,19 @@ var pickerUI = new PickerUI(myPicker, {
         pass: "#pass",
         undo: "#undo",
         redo: "#redo",
+        reset: "#reset",
         evaluating: "#evaluating",
-        favorites: "#favorites"
+        favorites: "#favorites",
+        settings: {
+            maxBatchSize: '#batch-size',
+            roles: '.roles',
+            excludeOptional: '#exclude-optional',
+            excludeTemporary: '#exclude-temporary',
+            excludeDLC: '#exclude-dlc',
+            excludeGacha: '#exclude-gacha',
+            excludeNGPlus: '#exclude-ngplus',
+            excludeRepeats: '#exclude-repeats'
+        }
     }
 });
 
